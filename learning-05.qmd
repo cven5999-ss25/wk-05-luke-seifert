@@ -9,17 +9,25 @@ editor: visual
 
 Learning reflections are part of your weekly homework and have a weight of 20% of your final grade. Write a reflection in your own words on the different parts of the weeks material below. You can also use your learning reflections as a notebook as you work through exercises or readings. Write as much as you like, but a minimum of 100 words in total.
 
-# Lecture
+# **Lecture**
 
-<!--# Add your reflections on the lecture of this week here -->
+Member This ”Data Types and Vectors” lecture was especially helpful. I will likely have to convert a lot of my data to numerical for analysis so it was good to get comfortable with mutate(data = as.numeric(data)). Also summarise(mean_data. = mean(data, na.rm =TRUE)) will be useful, as I will have to eliminate a lot of Nas in my data. Also the rename_with(\~str_remove()) function is good to know. I will likely have to clean up my data by hand because it is a lot of broken English, as it was conducted by government workers of Malawi who had to translate back and forth from English to Chichewa, so I will have to make my own columns and data based off of my interpretations on what they put.
 
-# Homework Assignment
+# **HW**
 
-<!--# Add your reflections on the homework programming assignment here -->
+I am not sure if I will need to go from long to wide tables and vice versa with my data set, but these are good skills to have encase they are needed and the homework does a good job of having us use these skills on our own. I appreciated this HW being a bit shorter as we are approaching our capstone project work.
 
-# Readings
+# **Readings**
 
-<!--# Add your reflections on the required readings here -->
+[R for Data Science - Section 12 - Tidy data:]{.underline}
+
+“tidyr is a member of the core tidyverse” -\> library(tidyverse). The notes on pivoting are good too, but I will be editing my excel mainly by hand because the responses are so inconsistent I have to make sense of them before starting any type of analysis. Complete() and fill() are good ones as well to help deal with a lot of nas.
+
+[R for Data Science - Section 15 – Factors:]{.underline}
+
+“factors are used to work with categorical variables, variables that have a fixed and known set of possible values. They are also useful when you want to display character vectors in a non-alphabetical order.” Setting levels for factoring is very useful when using categorical data. Most of my data will likely be binary and means though.
+
+Also helpful) fct_reorder(f,x) with f = factors and x = numeric vector for reordering
 
 # Submit learning reflections
 
