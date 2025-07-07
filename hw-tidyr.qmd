@@ -30,7 +30,7 @@ library(here)
 
 ```{r}
 
-
+waste_data <- read_csv(here::here("data/msw-generation-and-composition-by-income.csv"))
 ```
 
 # Task 2: Vector coersion
@@ -52,6 +52,13 @@ waste_data |>
 
 ```{r}
 
+levels_income_cat <- c("high income",
+                       "upper-middle income",
+                       "lower-middle income",
+                       "low income")
+
+waste_data_fct <- waste_data |> 
+  mutate(income_cat = factor(income_cat, levels = levels_income_cat))
 ```
 
 # Task 3: From wide to long
@@ -72,6 +79,11 @@ waste_data |>
 
 ```{r}
 
+waste_data_long <- waste_data_fct |> 
+  pivot_longer(cols = food_organic_waste:yard_garden_green_waste,
+               names_to = "waste_category",
+               values_to = "percent") |> 
+               drop_na(percent)
 ```
 
 # Task 4: Summarise data
@@ -90,6 +102,9 @@ waste_data_long <- read_rds(here("data/msw-generation-and-composition-by-income-
 
 ```{r}
 
+waste_data_long_mean <- waste_data_long |> 
+  group_by(income_cat, waste_category) |> 
+  summarise(mean_percent = mean(percent))
 ```
 
 1.  Starting with the `waste_data_long_mean` object, execute the code and observe the output in the Console. Would you publish this table in this format in a report?
@@ -102,6 +117,9 @@ waste_data_long <- read_rds(here("data/msw-generation-and-composition-by-income-
 
 ```{r}
 
+waste_data_long_mean |> 
+  pivot_wider(names_from = waste_category,
+              values_from = mean_percent)
 ```
 
 # Task 5: Data visualisation
@@ -124,6 +142,25 @@ waste_data_long_mean <- read_rds(here("data/msw-generation-and-composition-by-in
 
 ```{r}
 
+ggplot(data = waste_data_long_mean, 
+       mapping = aes(x = mean_percent, 
+                     y = waste_category, 
+                     fill = income_cat)) + 
+  geom_col(position = position_dodge()) + 
+  labs(title = "Waste Composition", 
+       subtitle = "Mean percentages of nine waste categories displayed by income categories",
+       x = "mean (percent)", 
+       y = "waste category", 
+       fill = "Income category", 
+       caption = "Data from: https://datacatalog.worldbank.org/search/dataset/0039597") + 
+  scale_x_continuous(breaks = seq(0, 50, 5)) + 
+  scale_fill_brewer(type = "qual", palette = 3) +
+  theme_minimal() + 
+  theme(panel.grid.minor = element_blank(), 
+        panel.grid.major.y = element_blank())
+
+#i was trying to comment out each line at a time to see what they were doing
+#specifically the lines at the end of this code. This was helpful
 ```
 
 ![](figs/fig-01-mean-waste-composition-by-income.png)

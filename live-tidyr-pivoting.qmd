@@ -35,12 +35,19 @@ Additional metadata on location and type of bin is available.
 
 ```{r}
 
-
+waste_data <- read_delim(here::here("data/rbtl_fs22_waste_composition_bellevue.csv"), delim = ";")
 
 ```
 
 ```{r}
 
+waste_data_long <- waste_data |> 
+  select(number, starts_with("weight")) |> 
+  rename_with(~str_remove(.x, "weight_")) |> 
+  select(-total) |> 
+  pivot_longer(cols = !number,
+               names_to = "weight_category",
+               values_to = "weight")
 
 ```
 
@@ -56,6 +63,7 @@ gapminder_wide <- read_csv("https://raw.githubusercontent.com/swcarpentry/r-novi
 
 ```{r}
 
+gapminder_wide
 
 ```
 
@@ -63,6 +71,11 @@ gapminder_wide <- read_csv("https://raw.githubusercontent.com/swcarpentry/r-novi
 
 ```{r}
 
+gapminder_long <- gapminder_wide |> 
+  pivot_longer(cols = gdpPercap_1952:pop_2007, 
+               names_to = "obstype_year",
+               values_to = "obs_value") |> 
+  separate("obstype_year", into = c("obs_type", "year"), sep = "_")
 
 ```
 
@@ -73,6 +86,16 @@ gapminder_wide <- read_csv("https://raw.githubusercontent.com/swcarpentry/r-novi
 
 ```{r}
 
+gapminder_long_summary <- gapminder_long |> 
+  group_by(continent, obs_type) |> 
+  summarise(means = mean(obs_value)) 
+
+# Want a readable table? Back to wide
+
+gapminder_long_summary |> 
+  pivot_wider(names_from = obs_type,
+              values_from = means) |> 
+  knitr::kable(digits = 1)
 ```
 
 ### From long to intermediate format
